@@ -1,0 +1,11 @@
+<Object>
+  <Data>
+    <Screen type="Hash">
+      <Resolution type="Hash">
+        <X type="Fixnum">1280</X>
+        <Y type="Fixnum">768</Y>
+      </Resolution>
+      <Fullscreen type="FalseClass"/>
+    </Screen>
+  </Data>
+</Object>
