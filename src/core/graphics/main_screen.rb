@@ -9,7 +9,11 @@ module Core
       end
 
       def button_down key
-        current_scene.focused_object.key_down key
+        if [::Gosu::MsLeft, ::Gosu::MsRight].include? key
+          current_scene.focused_object.mouse_down key == ::Gosu::MsLeft ? :left : :right
+        else
+          current_scene.focused_object.key_down key
+        end
       end
 
       def update

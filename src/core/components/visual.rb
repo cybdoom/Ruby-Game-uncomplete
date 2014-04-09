@@ -2,7 +2,11 @@ module Core
   module Components
     module Visual
       def coordinates
-        @coordinates || { x: 0, y: 0 }
+        @coordinates
+      end
+
+      def size
+        @size
       end
 
       def relative_coordinates object
@@ -21,11 +25,31 @@ module Core
       end
 
       def draw
-        Core::Graphics::TextureManager[self.class.texture_name].draw(
-          coordinates[:x],
-          coordinates[:y],
-          0
+        options = draw_options || default_draw_options
+
+        texture = Core::Graphics::TextureManager[options[:texture_name]]
+
+        options[:native_scale] = {
+          x: size[:x].to_f / texture.width,
+          y: size[:y].to_f / texture.height
+        }
+        puts options[:native_scale]
+
+        texture.draw(
+          Core::Graphics.settings.resolution[:x] / 2 + coordinates[:x] - size[:x] / 2,
+          Core::Graphics.settings.resolution[:y] / 2 + coordinates[:y] - size[:y] / 2,
+          0,
+          options[:native_scale][:x],
+          options[:native_scale][:y],
         )
+      end
+
+      def draw_options
+        @draw_options
+      end
+
+      def default_draw_options
+        self.class.class_variable_get('@@default_draw_options')
       end
 
       def self.included receiver
@@ -33,8 +57,8 @@ module Core
       end
 
       module ClassMethods
-        def texture_name
-          self.class_variable_get('@@texture_name')
+        def default_draw_options= value
+          self.class_variable_set('@@default_draw_options', value)
         end
       end
     end

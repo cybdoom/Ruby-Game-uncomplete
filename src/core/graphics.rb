@@ -16,5 +16,12 @@ module Core
     def self.run
       @@main_screen.show
     end
+
+    def self.screen_center
+      {
+        x: settings.resolution[:x] / 2,
+        y: settings.resolution[:y] / 2
+      }
+    end
   end
 end

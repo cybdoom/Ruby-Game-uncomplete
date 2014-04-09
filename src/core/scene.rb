@@ -6,6 +6,7 @@ module Core
 
     def initialize
       @objects = [] << Cursor.new
+
       @focused_object = self
     end
 
@@ -13,6 +14,13 @@ module Core
       case key
       when Gosu::KbEscape
         Core::Game.exit
+      end
+    end
+
+    def mouse_down button
+      case button
+      when :left
+      when :right
       end
     end
 
