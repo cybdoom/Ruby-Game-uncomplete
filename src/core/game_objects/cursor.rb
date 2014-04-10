@@ -8,9 +8,10 @@ class Cursor < Core::GameObject
       y: 0
     }
     @size = {
-      x: 20,
-      y: 20
+      x: 35,
+      y: 35
     }
+    Core::Graphics.cursor = self
   end
 
   def update
@@ -20,8 +21,3 @@ class Cursor < Core::GameObject
     }
   end
 end
-
-Cursor.default_draw_options = {
-  texture_name: 'cursor.png',
-  z_order: 999
-}

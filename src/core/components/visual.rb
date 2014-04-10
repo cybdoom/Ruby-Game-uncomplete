@@ -1,12 +1,36 @@
 module Core
   module Components
     module Visual
+      def initialize
+        @draw_options = {
+          texture_name: 'no_texture.png',
+          z_order: 0
+        }
+      end
+
+      def radius
+        @radius
+      end
+
       def coordinates
         @coordinates
       end
 
       def size
         @size
+      end
+
+      def draw_options
+        @draw_options
+      end
+
+      def rectangle
+        {
+          left: @coordinates[:x] - size[:x] / 2,
+          right: @coordinates[:x] + size[:x] / 2,
+          top: @coordinates[:y] - size[:y] / 2,
+          bottom: @coordinates[:x] + size[:y] / 2,
+        }
       end
 
       def relative_coordinates object
@@ -24,8 +48,19 @@ module Core
         child_coordinates
       end
 
+      def contains_point? point
+        if radius
+          (coordinates[:x] - point[:x])**2 + (coordinates[:x] - point[:x])**2 <= self.radius**2
+        else
+          point[:x] >= rectangle[:left] &&
+          point[:x] <= rectangle[:right] &&
+          point[:y] <= rectangle[:bottom] &&
+          point[:y] >= rectangle[:top]
+        end
+      end
+
       def draw
-        options = draw_options || default_draw_options
+        options = draw_options
 
         texture = Core::Graphics::TextureManager[options[:texture_name]]
 
@@ -33,33 +68,18 @@ module Core
           x: size[:x].to_f / texture.width,
           y: size[:y].to_f / texture.height
         }
-        puts options[:native_scale]
 
         texture.draw(
           Core::Graphics.settings.resolution[:x] / 2 + coordinates[:x] - size[:x] / 2,
           Core::Graphics.settings.resolution[:y] / 2 + coordinates[:y] - size[:y] / 2,
-          0,
+          options[:z_order],
           options[:native_scale][:x],
-          options[:native_scale][:y],
+          options[:native_scale][:y]
         )
-      end
-
-      def draw_options
-        @draw_options
-      end
-
-      def default_draw_options
-        self.class.class_variable_get('@@default_draw_options')
       end
 
       def self.included receiver
         receiver.extend ClassMethods
-      end
-
-      module ClassMethods
-        def default_draw_options= value
-          self.class_variable_set('@@default_draw_options', value)
-        end
       end
     end
   end

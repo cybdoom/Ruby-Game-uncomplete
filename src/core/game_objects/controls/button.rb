@@ -1,6 +1,5 @@
 class Button < Control
-
-  attr_accessor :click
+  include Core::Components::Clickable
 
   def initialize
     super
@@ -9,13 +8,12 @@ class Button < Control
       y: 0
     }
     @size = {
-      x: 100,
-      y: 25
+      x: 150,
+      y: 50
     }
   end
-end
 
-Button.default_draw_options = {
-  texture_name: 'button.png',
-  z_order: 0
-}
+  def mouse_button_down id
+    Core::Game.quit if id == :left
+  end
+end

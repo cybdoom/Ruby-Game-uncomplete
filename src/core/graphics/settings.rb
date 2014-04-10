@@ -14,7 +14,7 @@ module Core
               x: 1024,
               y: 768
             },
-            fullscreen: true
+            fullscreen: false
           })
         end
       end

@@ -17,6 +17,14 @@ module Core
       @@main_screen.show
     end
 
+    def self.cursor
+      @@cursor
+    end
+
+    def self.cursor= value
+      @@cursor = value
+    end
+
     def self.screen_center
       {
         x: settings.resolution[:x] / 2,
