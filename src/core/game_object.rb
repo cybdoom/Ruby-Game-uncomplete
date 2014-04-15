@@ -4,9 +4,6 @@ module Core
 
     attr_accessor :parent, :children
 
-    def initialize
-    end
-
     def has_component? component
       self.class.included? component
     end

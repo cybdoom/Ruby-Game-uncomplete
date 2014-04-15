@@ -1,16 +1,10 @@
 class Cursor < Core::GameObject
   include Core::Components::Visual
+  include Core::Components::Spatial
 
   def initialize
     super
-    @coordinates = {
-      x: 0,
-      y: 0
-    }
-    @size = {
-      x: 35,
-      y: 35
-    }
+    @draw_options[:texture_name] = 'cursor.png'
     Core::Graphics.cursor = self
   end
 
