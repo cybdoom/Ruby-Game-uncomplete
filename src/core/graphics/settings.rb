@@ -11,10 +11,10 @@ module Core
         def default
           Settings.new.init_with_hash({
             resolution: {
-              x: 1024,
-              y: 768
+              x: 1280,
+              y: 1024
             },
-            fullscreen: false
+            fullscreen: true
           })
         end
       end

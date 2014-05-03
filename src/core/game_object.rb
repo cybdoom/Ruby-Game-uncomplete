@@ -5,7 +5,7 @@ module Core
     attr_accessor :parent, :children
 
     def has_component? component
-      self.class.included? component
+      self.class.include? component
     end
 
     def is_focused?

@@ -1,44 +1,22 @@
 module Core
   module Components
     module Spatial
-      def initialize
-        @size = {
-          x: 50,
-          y: 50
-        }
-
-        @coordinates = {
-          x: 0,
-          y: 0
-        }
-
-        super
-      end
-
-      def coordinates
-        @coordinates
-      end
-
-      def size
-        @size
-      end
-
-      def radius
-        @radius
-      end
+      property :size
+      property :offset
+      property :radius
 
       def rectangle
         {
-          left: @coordinates[:x] - size[:x] / 2,
-          right: @coordinates[:x] + size[:x] / 2,
-          top: @coordinates[:y] - size[:y] / 2,
-          bottom: @coordinates[:x] + size[:y] / 2,
+          left: offset_against()[:x] - size[:x] / 2,
+          right: offset_against()[:x] + size[:x] / 2,
+          top: offset_against()[:y] - size[:y] / 2,
+          bottom: offset_against()[:x] + size[:y] / 2,
         }
       end
 
       def contains_point? point
         if radius
-          (coordinates[:x] - point[:x])**2 + (coordinates[:x] - point[:x])**2 <= self.radius**2
+          (offset_against()[:x] - point[:x])**2 + (offset_against()[:x] - point[:x])**2 <= self.radius**2
         else
           point[:x] >= rectangle[:left] &&
           point[:x] <= rectangle[:right] &&
@@ -47,19 +25,18 @@ module Core
         end
       end
 
-      def relative_coordinates object
+      def offset_against object=nil
         parent = self.parent
-        child_coordinates = @coordinates
+        child_offset = @offset
 
         while parent &&
-              !parent.is_a?(Core::Scene) &&
               parent != object
-          child_coordinates[:x] += parent.coordinates[:x]
-          child_coordinates[:y] += parent.coordinates[:y]
+          child_offset[:x] += parent.offset[:x]
+          child_offset[:y] += parent.offset[:y]
           parent = parent.parent
         end
 
-        child_coordinates
+        child_offset
       end
     end
   end

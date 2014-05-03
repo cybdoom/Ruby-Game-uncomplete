@@ -1,5 +1,8 @@
 module Core
   module Graphics
+    MAX_Z_ORDER = 999
+    DEFAULT_Z_ORDER = 1
+
     def self.init settings=nil
       @@settings = settings || Core::Graphics::Settings.default
       @@main_screen = MainScreen.new

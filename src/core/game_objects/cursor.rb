@@ -1,15 +1,26 @@
 class Cursor < Core::GameObject
-  include Core::Components::Visual
-  include Core::Components::Spatial
+  component :visual
+  component :spatial
 
   def initialize
     super
-    @draw_options[:texture_name] = 'cursor.png'
+    self.draw_options = {
+      image: 'cursor',
+      z_order: Core::Graphics::MAX_Z_ORDER
+    }
+    self.size = {
+      x: 20,
+      y: 20
+    }
+    self.offset = {
+      x: 0,
+      y: 0
+    }
     Core::Graphics.cursor = self
   end
 
   def update
-    @coordinates = {
+    offset = {
       x: Core::Graphics.main_screen.mouse_x - Core::Graphics.settings.resolution[:x] / 2,
       y: Core::Graphics.main_screen.mouse_y - Core::Graphics.settings.resolution[:y] / 2
     }

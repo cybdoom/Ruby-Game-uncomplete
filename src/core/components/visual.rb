@@ -1,26 +1,41 @@
 module Core
   module Components
     module Visual
-      def initialize
-        @draw_options = {
-          texture_name: 'no_texture.png',
-          z_order: 0
-        }
-
-        super
-      end
+      property :draw_options
 
       def draw
-        options = @draw_options
+        options = self.draw_options
+        image = Core::Graphics::ImageManager[options[:image]]
 
-        options[:sprite_coordinates] = @coordinates || { x: 0, y: 0 }
+        options[:sprite_size] =
+        if self.has_component? Core::Components::Spatial
+          {
+            x: size[:x],
+            y: size[:y]
+          }
+        else
+          {
+            x: image.width,
+            y: image.height
+          }
+        end
 
-        texture = Core::Graphics::TextureManager[options[:texture_name]]
+        puts self
+        options[:sprite_coordinates] = {
+          x: Core::Graphics.settings.resolution[:x] / 2,
+          y: Core::Graphics.settings.resolution[:y] / 2
+        }
+        puts options[:sprite_coordinates]
+        options[:sprite_coordinates] = {
+          x: options[:sprite_coordinates][:x] + offset_against()[:x],
+          y: options[:sprite_coordinates][:y] + offset_against()[:y]
+        } if self.class.include? Core::Components::Spatial
+        puts options[:sprite_coordinates]
 
-        texture.draw(
-          options[:sprite_coordinates][:x] + Core::Graphics.settings.resolution[:x] / 2,
-          options[:sprite_coordinates][:y] + Core::Graphics.settings.resolution[:y] / 2,
-          options[:z_order]
+        image.draw(
+          options[:sprite_coordinates][:x] - options[:sprite_size][:x] / 2,
+          options[:sprite_coordinates][:y] - options[:sprite_size][:y] / 2,
+          options[:z_order] || Core::Graphics::DEFAULT_Z_ORDER
         )
       end
     end

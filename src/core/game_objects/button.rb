@@ -1,9 +1,21 @@
 class Button < Core::GameObject
-  include Core::Components::Visual
-  include Core::Components::Spatial
+  component :visual
+  component :spatial
+  component :clickable
 
   def initialize
-    puts @draw_options
+    super
+    self.draw_options = {
+      image: 'button'
+    }
+    self.size = {
+      x: 100,
+      y: 50
+    }
+    self.offset = {
+      x: 0,
+      y: 0
+    }
   end
 
   def mouse_button_down id
